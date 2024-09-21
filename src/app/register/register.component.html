@@ -136,7 +136,7 @@
                                                 data-mdb-button-init
                                                 data-mdb-ripple-init
                                                 class="btn btn-light btn-lg"
-                                                routerLink="/login">Cancel</button>
+                                                routerLink="/login">Back to Login</button>
 
                                         <button type="button"
                                                 data-mdb-button-init
@@ -147,6 +147,7 @@
                                         <button type="submit"
                                                 data-mdb-button-init
                                                 data-mdb-ripple-init
+                                                [disabled]="!registerForm.valid"
                                                 class="btn btn-warning btn-lg ms-2">Submit form</button>
                                     </div>
                                 </form>

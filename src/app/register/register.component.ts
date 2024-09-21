@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../Auth/auth.service';
+import { CacheService } from '../cache/cache.service';
 import { Registeration } from '../model/registeration.model';
 
 @Component({
@@ -20,7 +21,7 @@ export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
 
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private cacheService: CacheService) { }
 
 
   ngOnInit() {
@@ -32,12 +33,12 @@ export class RegisterComponent implements OnInit {
 
     this.registerForm = new FormGroup({
       'userInfo': new FormGroup({
-        'firstName': new FormControl(Validators.required),
-        'lastName': new FormControl(Validators.required),
-        'address': new FormControl(Validators.required),
-        'pincode': new FormControl(Validators.required),
-        'dob': new FormControl(Validators.required),
-        'gender': new FormControl(Validators.required),
+        'firstName': new FormControl(null, Validators.required),
+        'lastName': new FormControl(null, Validators.required),
+        'address': new FormControl(null, Validators.required),
+        'pincode': new FormControl(null, Validators.required),
+        'dob': new FormControl(null, Validators.required),
+        'gender': new FormControl(null, Validators.required),
         'state': new FormControl('state', Validators.required),
         'city': new FormControl('city', Validators.required),
       }),
@@ -57,6 +58,7 @@ export class RegisterComponent implements OnInit {
 
   // function for adding registeration data
   registerHere() {
+
     this.registrationData.firstName = this.registerForm.value.userInfo.firstName;
     this.registrationData.lastName = this.registerForm.value.userInfo.lastName;
     this.registrationData.address = this.registerForm.value.userInfo.address;
@@ -67,6 +69,8 @@ export class RegisterComponent implements OnInit {
     this.registrationData.pincode = this.registerForm.value.userInfo.pincode;
     this.registrationData.email = this.registerForm.value.email;
     this.registrationData.password = this.registerForm.value.password;
+    this.cacheService.setRegisterationDetails(this.registrationData);
+
   }
 
   onReset() {

@@ -9,4 +9,5 @@ export class Registeration {
     pincode?: string;
     email?: string;
     password?: string;
+
 }

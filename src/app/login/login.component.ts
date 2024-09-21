@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../Auth/auth.service';
+import { NotificationService } from '../Auth/notification.service';
+import { NotificationType } from '../model/notificationMessage';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +20,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   error: string = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private notificationService: NotificationService) { }
 
   ngOnInit() {
 
@@ -42,9 +44,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   }
 
-  onSubmit() {
+  onSubmit(form: any) {
 
-    if (!this.loginForm.valid) {
+    if (form.submitted && !this.loginForm.valid) {
       return;
     }
 
@@ -53,12 +55,25 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.authSubscription = this.authService.login(email, password).subscribe(res => {
       console.log('Login', res);
+
+      this.notificationService.sendMessage({
+        message: 'Success',
+        type: NotificationType.success
+      })
+
       this.router.navigate(['dashboard']);
 
     }, errorMessage => {
-      this.error = errorMessage.message;
-      window.scrollTo(0, 0);
-      console.log(this.error);
+
+      this.notificationService.sendMessage({
+        message: errorMessage.message,
+        type: NotificationType.error
+      })
+
+      // this.error = errorMessage.message;
+      // window.scrollTo(0, 0);
+
+      // console.log(this.error);
     })
 
     console.log('Login Form', this.loginForm);
