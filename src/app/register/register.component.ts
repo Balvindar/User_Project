@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../Auth/auth.service';
+import { NotificationService } from '../Auth/notification.service';
 import { CacheService } from '../cache/cache.service';
+import { NotificationType } from '../model/notificationMessage';
 import { Registeration } from '../model/registeration.model';
 
 @Component({
@@ -12,6 +15,7 @@ import { Registeration } from '../model/registeration.model';
 export class RegisterComponent implements OnInit {
 
 
+  signupSub!: Subscription;
   genders = ['male', 'female', 'other'];
   states = ['state', 'West bengal', 'Jharkhand', 'karnataka', 'Maharashtra'];
   citys = ['city', 'New Town', 'Dhanbad', 'Bengaluru', 'Pune'];
@@ -21,11 +25,19 @@ export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
 
 
-  constructor(private authService: AuthService, private cacheService: CacheService) { }
+  constructor(private authService: AuthService,
+    private cacheService: CacheService,
+    private notificationService: NotificationService) { }
 
 
   ngOnInit() {
     this.initForm();
+  }
+
+  ngOnDestroy() {
+    if (this.signupSub) {
+      this.signupSub.unsubscribe();
+    }
   }
 
 
@@ -52,7 +64,19 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
 
     this.registerHere()
-    this.authService.signUp(this.registrationData).subscribe(resPonse => console.log('Success', resPonse));
+    this.signupSub = this.authService.signUp(this.registrationData).subscribe(resPonse => {
+      this.notificationService.sendMessage({
+        message: 'Registration Successfull',
+        type: NotificationType.success
+      })
+      console.log('Success', resPonse);
+    }, errorMessage => {
+      this.notificationService.sendMessage({
+        message: errorMessage.message,
+        type: NotificationType.error
+      })
+    }
+    );
     console.log('Register Form', this.registerForm);
   }
 

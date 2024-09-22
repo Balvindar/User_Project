@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         type: NotificationType.success
       })
 
-      this.router.navigate(['dashboard']);
+      this.router.navigate(['dashboard'], { queryParams: { 'email': res.email } });
 
     }, errorMessage => {
 
