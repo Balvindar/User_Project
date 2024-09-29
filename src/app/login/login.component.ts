@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   loginForm!: FormGroup;
+  showPassword = false;
 
   authSubscription!: Subscription;
 
@@ -77,6 +78,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     })
 
     console.log('Login Form', this.loginForm);
+  }
+
+  // function for password visiblity
+  togglePasswordVisiblity() {
+    this.showPassword = !this.showPassword;
   }
 
 

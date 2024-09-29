@@ -10,6 +10,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ToastrModule } from 'ngx-toastr';
 import { HeaderComponent } from './header/header.component';
 import { DropdownDirective } from './directive/dropdown.directive';
+import { AllBlocksComponent } from './all-blocks/all-blocks.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { DropdownDirective } from './directive/dropdown.directive';
     RegisterComponent,
     DashboardComponent,
     HeaderComponent,
-    DropdownDirective
+    DropdownDirective,
+    AllBlocksComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
